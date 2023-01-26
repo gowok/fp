@@ -17,3 +17,14 @@ func Values[T comparable, U any](input map[T]U) []U {
 
 	return result
 }
+
+func CopyBy[T comparable, U any](input map[T]U, cb func(key T, value U) bool) map[T]U {
+	result := map[T]U{}
+	for k, v := range input {
+		if cb(k, v) {
+			result[k] = v
+		}
+	}
+
+	return result
+}
