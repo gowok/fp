@@ -1,9 +1,23 @@
 package slices
 
+import "sync"
+
 func ForEach[T any](input []T, cb func(val T, index int)) {
 	for i, v := range input {
 		cb(v, i)
 	}
+}
+
+func GoForEach[T any](input []T, cb func(val T, index int)) {
+	wg := sync.WaitGroup{}
+	for i, v := range input {
+		wg.Add(1)
+		go func(vv T) {
+			defer wg.Done()
+			cb(vv, i)
+		}(v)
+	}
+	wg.Wait()
 }
 
 func Filter[T comparable](input []T, cb func(val T, index int) bool) []T {
