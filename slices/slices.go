@@ -48,3 +48,25 @@ func Reduce[T comparable, U any](input []T, cb func(acc U, val T, index int) U, 
 
 	return result
 }
+
+func Range[T int | float32 | float64](input T, params ...T) []T {
+	result := []T{}
+	var start T = 0
+	var finish T = input
+	var step T = 1
+
+	if len(params) > 0 {
+		start = input
+		finish = params[0]
+	}
+
+	if len(params) == 2 {
+		step = params[1]
+	}
+
+	for ; start < finish; start += step {
+		result = append(result, start)
+	}
+
+	return result
+}
