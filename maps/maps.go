@@ -28,3 +28,15 @@ func CopyBy[T comparable, U any](input map[T]U, cb func(key T, value U) bool) ma
 
 	return result
 }
+
+func CopyByKeys[T comparable, U any](input map[T]U, keys []T) map[T]U {
+	return CopyBy(input, func(k T, v U) bool {
+		for _, kk := range keys {
+			if k == kk {
+				return true
+			}
+		}
+
+		return false
+	})
+}
