@@ -54,3 +54,12 @@ func Entries[T comparable, U any](input map[T]U) []Entry[T, U] {
 
 	return result
 }
+
+func Combine[T comparable, U any](input1 map[T]U, input2 map[T]U) map[T]U {
+	result := input1
+	for k, v := range input2 {
+		result[k] = v
+	}
+
+	return result
+}
