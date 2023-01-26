@@ -70,3 +70,13 @@ func Range[T int | float32 | float64](input T, params ...T) []T {
 
 	return result
 }
+
+func Includes[T comparable](input []T, comp T) bool {
+	for _, v := range input {
+		if comp == v {
+			return true
+		}
+	}
+
+	return false
+}
