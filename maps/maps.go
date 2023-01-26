@@ -40,3 +40,17 @@ func CopyByKeys[T comparable, U any](input map[T]U, keys []T) map[T]U {
 		return false
 	})
 }
+
+type Entry[T comparable, U any] struct {
+	Key   T
+	Value U
+}
+
+func Entries[T comparable, U any](input map[T]U) []Entry[T, U] {
+	result := []Entry[T, U]{}
+	for k, v := range input {
+		result = append(result, Entry[T, U]{k, v})
+	}
+
+	return result
+}
