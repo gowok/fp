@@ -19,3 +19,12 @@ func Map[T comparable, U any](input []T, cb func(val T, index int) U) []U {
 
 	return result
 }
+
+func Reduce[T comparable, U any](input []T, cb func(acc U, val T, index int) U, initial U) U {
+	var result U
+	for i, v := range input {
+		result = cb(result, v, i)
+	}
+
+	return result
+}
