@@ -56,3 +56,30 @@ func Test_Reduce(t *testing.T) {
 	must := must.New(t)
 	must.Equal(expected, actual)
 }
+
+func Test_Range(t *testing.T) {
+	t.Run("max only", func(t *testing.T) {
+		expected := []int{0, 1, 2, 3, 4}
+		actual := Range(5)
+
+		must := must.New(t)
+		must.Equal(expected, actual)
+	})
+
+	t.Run("min and max", func(t *testing.T) {
+		expected := []int{1, 2, 3, 4}
+		actual := Range(1, 5)
+
+		must := must.New(t)
+		must.Equal(expected, actual)
+	})
+
+	t.Run("min, max, and steps", func(t *testing.T) {
+		expected := []int{1, 3, 5, 7, 9}
+		actual := Range(1, 10, 2)
+
+		must := must.New(t)
+		must.Equal(expected, actual)
+	})
+
+}
