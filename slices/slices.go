@@ -12,10 +12,10 @@ func GoForEach[T any](input []T, cb func(val T, index int)) {
 	wg := sync.WaitGroup{}
 	for i, v := range input {
 		wg.Add(1)
-		go func(vv T) {
+		go func(vv T, j int) {
 			defer wg.Done()
-			cb(vv, i)
-		}(v)
+			cb(vv, j)
+		}(v, i)
 	}
 	wg.Wait()
 }
