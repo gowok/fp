@@ -21,3 +21,10 @@ func Test_Keys(t *testing.T) {
 	must.Equal(len(keys), len(actual))
 }
 
+func Test_Values(t *testing.T) {
+	actual := Values(sample)
+
+	must := must.New(t)
+	must.Equal(len(values), len(actual))
+}
+
