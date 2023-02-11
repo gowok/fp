@@ -83,3 +83,21 @@ func Test_Range(t *testing.T) {
 	})
 
 }
+
+func Test_Includes(t *testing.T) {
+	sample := []int{1, 2, 3}
+	t.Run("positive", func(t *testing.T) {
+		actual := Includes(sample, 1)
+
+		must := must.New(t)
+		must.True(actual)
+	})
+
+	t.Run("negative", func(t *testing.T) {
+		actual := Includes(sample, 0)
+
+		must := must.New(t)
+		must.False(actual)
+	})
+
+}
