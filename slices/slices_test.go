@@ -34,3 +34,14 @@ func Test_Filter(t *testing.T) {
 	must := must.New(t)
 	must.Equal(expected, actual)
 }
+
+func Test_Map(t *testing.T) {
+	expected := []int{2, 4, 6}
+	sample := []int{1, 2, 3}
+	actual := Map(sample, func(s, i int) int {
+		return s * 2
+	})
+
+	must := must.New(t)
+	must.Equal(expected, actual)
+}
