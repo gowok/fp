@@ -52,3 +52,15 @@ func Test_CopyByKeys(t *testing.T) {
 	must.Equal(expected, actual)
 }
 
+func Test_Entries(t *testing.T) {
+	expected := []Entry[string, int]{
+		{"x", 1},
+		{"y", 2},
+		{"z", 3},
+	}
+	actual := Entries(sample)
+
+	must := must.New(t)
+	must.Equal(len(expected), len(actual))
+}
+
