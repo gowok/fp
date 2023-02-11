@@ -45,3 +45,14 @@ func Test_Map(t *testing.T) {
 	must := must.New(t)
 	must.Equal(expected, actual)
 }
+
+func Test_Reduce(t *testing.T) {
+	expected := 6
+	sample := []int{1, 2, 3}
+	actual := Reduce(sample, func(acc, val, i int) int {
+		return acc + val
+	}, 0)
+
+	must := must.New(t)
+	must.Equal(expected, actual)
+}
