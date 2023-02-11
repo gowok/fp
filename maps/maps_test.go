@@ -40,3 +40,15 @@ func Test_CopyBy(t *testing.T) {
 	must := must.New(t)
 	must.Equal(expected, actual)
 }
+
+func Test_CopyByKeys(t *testing.T) {
+	expected := map[string]int{
+		"x": 1,
+		"y": 2,
+	}
+	actual := CopyByKeys(sample, []string{"x", "y"})
+
+	must := must.New(t)
+	must.Equal(expected, actual)
+}
+
