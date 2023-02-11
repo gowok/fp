@@ -1,6 +1,10 @@
 package strings
 
-func Repeat(times int, input string) string {
+func Repeat(input string, times int) string {
+	if times <= 0 {
+		return ""
+	}
+
 	result := ""
 	for i := 0; i < times; i++ {
 		result += input
