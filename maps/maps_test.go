@@ -64,3 +64,19 @@ func Test_Entries(t *testing.T) {
 	must.Equal(len(expected), len(actual))
 }
 
+func Test_Combine(t *testing.T) {
+	expected := map[string]int{
+		"x": 1,
+		"y": 2,
+		"z": 3,
+		"a": 4,
+		"b": 5,
+	}
+	actual := Combine(sample, map[string]int{
+		"a": 4,
+		"b": 5,
+	})
+
+	must := must.New(t)
+	must.Equal(expected, actual)
+}
