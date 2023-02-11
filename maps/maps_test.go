@@ -28,3 +28,15 @@ func Test_Values(t *testing.T) {
 	must.Equal(len(values), len(actual))
 }
 
+func Test_CopyBy(t *testing.T) {
+	expected := map[string]int{
+		"x": 1,
+		"y": 2,
+	}
+	actual := CopyBy(sample, func(key string, value int) bool {
+		return key != "z"
+	})
+
+	must := must.New(t)
+	must.Equal(expected, actual)
+}
