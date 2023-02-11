@@ -1,3 +1,3 @@
 module github.com/gowok/fp
 
-go 1.19
+go 1.20
