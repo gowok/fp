@@ -16,3 +16,14 @@ func Test_Foreach(t *testing.T) {
 		})
 	})
 }
+
+func Test_GoForeach(t *testing.T) {
+	t.Run("positive", func(t *testing.T) {
+		sample := []int{1, 2, 3}
+		must := must.New(t)
+
+		GoForEach(sample, func(s, i int) {
+			must.Equal(sample[i], s)
+		})
+	})
+}
