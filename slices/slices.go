@@ -1,6 +1,8 @@
 package slices
 
-import "sync"
+import (
+	"sync"
+)
 
 func ForEach[T any](input []T, cb func(val T, index int)) {
 	for i, v := range input {
@@ -31,7 +33,13 @@ func Filter[T comparable](input []T, cb func(val T, index int) bool) []T {
 	return result
 }
 
-func Map[T comparable, U any](input []T, cb func(val T, index int) U) []U {
+func Map[T comparable, U any](input []T, cb func(val T) U) []U {
+	return MapIndex(input, func(val T, index int) U {
+		return cb(val)
+	})
+}
+
+func MapIndex[T comparable, U any](input []T, cb func(val T, index int) U) []U {
 	result := []U{}
 	for i, v := range input {
 		result = append(result, cb(v, i))
