@@ -74,6 +74,15 @@ func Test_Entries(t *testing.T) {
 	must.Equal(len(expected), len(actual))
 }
 
+func Test_EntriesSeq(t *testing.T) {
+	must := must.New(t)
+	count := 0
+	for range EntriesSeq(sample) {
+		count++
+	}
+	must.Equal(len(sample), count)
+}
+
 func Test_Combine(t *testing.T) {
 	expected := map[string]int{
 		"x": 1,

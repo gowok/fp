@@ -65,6 +65,14 @@ func Entries[T comparable, U any](input map[T]U) []Entry[T, U] {
 	return result
 }
 
+func EntriesSeq[T comparable, U any](input map[T]U) func(yield func(e Entry[T, U]) bool) {
+	return func(yield func(e Entry[T, U]) bool) {
+		for k, v := range input {
+			yield(Entry[T, U]{k, v})
+		}
+	}
+}
+
 func Combine[T comparable, U any](input1 map[T]U, input2 map[T]U) map[T]U {
 	result := input1
 	for k, v := range input2 {
