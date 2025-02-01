@@ -88,3 +88,15 @@ func Zip[T any, U any](slice1 []T, slice2 []U) func(yield func(T, U) bool) {
 		}
 	}
 }
+
+func Repeat[T any](input T, times int) (output []T) {
+	if times <= 0 {
+		return
+	}
+
+	for i := 0; i < times; i++ {
+		output = append(output, input)
+	}
+
+	return
+}

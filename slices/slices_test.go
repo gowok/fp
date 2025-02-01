@@ -111,3 +111,27 @@ func Test_Zip(t *testing.T) {
 		must.Equal(s1, s2)
 	}
 }
+
+func Test_Repeat(t *testing.T) {
+	t.Run("positive", func(t *testing.T) {
+		expected := []byte("***")
+		actual := Repeat('*', 3)
+
+		must := must.New(t)
+		must.Equal(len(expected), len(actual))
+		for e, a := range Zip(expected, actual) {
+			must.Equal(int(e), int(a))
+		}
+	})
+
+	t.Run("negative", func(t *testing.T) {
+		expected := []byte{}
+		actual := Repeat('*', 0)
+
+		must := must.New(t)
+		must.Equal(len(expected), len(actual))
+
+		actual = Repeat('*', -1)
+		must.Equal(len(expected), len(actual))
+	})
+}
