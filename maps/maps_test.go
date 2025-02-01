@@ -29,6 +29,15 @@ func Test_Values(t *testing.T) {
 	must.Equal(len(values), len(actual))
 }
 
+func Test_ValuesSeq(t *testing.T) {
+	must := must.New(t)
+	count := 0
+	for range ValuesSeq(sample) {
+		count++
+	}
+	must.Equal(len(sample), count)
+}
+
 func Test_CopyBy(t *testing.T) {
 	expected := map[string]int{
 		"x": 1,

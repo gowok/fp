@@ -20,6 +20,14 @@ func Values[T comparable, U any](input map[T]U) []U {
 	return result
 }
 
+func ValuesSeq[T comparable, U any](input map[T]U) func(yield func(v U) bool) {
+	return func(yield func(v U) bool) {
+		for _, v := range input {
+			yield(v)
+		}
+	}
+}
+
 func CopyBy[T comparable, U any](input map[T]U, cb func(key T, value U) bool) map[T]U {
 	result := map[T]U{}
 	for k, v := range input {
