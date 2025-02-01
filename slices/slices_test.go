@@ -101,3 +101,13 @@ func Test_Includes(t *testing.T) {
 	})
 
 }
+
+func Test_Zip(t *testing.T) {
+	sample1 := []int{1, 2, 3}
+	sample2 := []int{1, 2, 3}
+
+	must := must.New(t)
+	for s1, s2 := range Zip(sample1, sample2) {
+		must.Equal(s1, s2)
+	}
+}
