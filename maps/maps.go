@@ -1,5 +1,7 @@
 package maps
 
+import "encoding/json"
+
 func Keys[T comparable, U any](input map[T]U) []T {
 	result := []T{}
 	for k := range input {
@@ -62,4 +64,18 @@ func Combine[T comparable, U any](input1 map[T]U, input2 map[T]U) map[T]U {
 	}
 
 	return result
+}
+
+func FromStruct[T any](input T) (output map[string]any) {
+	jsonb, err := json.Marshal(input)
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(jsonb, &output)
+	if err != nil {
+		return
+	}
+
+	return
 }

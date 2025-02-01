@@ -80,3 +80,27 @@ func Test_Combine(t *testing.T) {
 	must := must.New(t)
 	must.Equal(expected, actual)
 }
+
+func Test_FromStruct(t *testing.T) {
+	expected := map[string]float64{
+		"x": 1,
+		"y": 2,
+		"z": 3,
+		"a": 4,
+		"b": 5,
+	}
+	actual := FromStruct(struct {
+		A int `json:"a"`
+		B int `json:"b"`
+		X int `json:"x"`
+		Y int `json:"y"`
+		Z int `json:"z"`
+	}{4, 5, 1, 2, 3})
+
+	must := must.New(t)
+	for k, v := range actual {
+		ev, ok := expected[k]
+		must.True(ok)
+		must.Equal(ev, v)
+	}
+}
