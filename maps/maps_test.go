@@ -1,6 +1,7 @@
 package maps
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/golang-must/must"
@@ -82,25 +83,37 @@ func Test_Combine(t *testing.T) {
 }
 
 func Test_FromStruct(t *testing.T) {
-	expected := map[string]float64{
-		"x": 1,
-		"y": 2,
-		"z": 3,
-		"a": 4,
-		"b": 5,
-	}
-	actual := FromStruct(struct {
-		A int `json:"a"`
-		B int `json:"b"`
-		X int `json:"x"`
-		Y int `json:"y"`
-		Z int `json:"z"`
-	}{4, 5, 1, 2, 3})
+	t.Run("positive", func(t *testing.T) {
+		expected := map[string]float64{
+			"x": 1,
+			"y": 2,
+			"z": 3,
+			"a": 4,
+			"b": 5,
+		}
+		actual := FromStruct(struct {
+			A int `json:"a"`
+			B int `json:"b"`
+			X int `json:"x"`
+			Y int `json:"y"`
+			Z int `json:"z"`
+		}{4, 5, 1, 2, 3})
 
-	must := must.New(t)
-	for k, v := range actual {
-		ev, ok := expected[k]
-		must.True(ok)
-		must.Equal(ev, v)
-	}
+		must := must.New(t)
+		for k, v := range actual {
+			ev, ok := expected[k]
+			must.True(ok)
+			must.Equal(ev, v)
+		}
+	})
+
+	t.Run("primitive", func(t *testing.T) {
+		actual := FromStruct(1)
+		must.New(t).Equal("map[string]interface {}", reflect.TypeOf(actual).String())
+	})
+
+	t.Run("func", func(t *testing.T) {
+		actual := FromStruct(func() {})
+		must.New(t).Equal("map[string]interface {}", reflect.TypeOf(actual).String())
+	})
 }
