@@ -79,16 +79,6 @@ func Range[T int | float32 | float64](input T, params ...T) []T {
 	return result
 }
 
-func Includes[T comparable](input []T, comp T) bool {
-	for _, v := range input {
-		if comp == v {
-			return true
-		}
-	}
-
-	return false
-}
-
 func Zip[T any, U any](slice1 []T, slice2 []U) func(yield func(T, U) bool) {
 	return func(yield func(x T, y U) bool) {
 		for i, ii := range slice1 {
@@ -102,7 +92,7 @@ func Repeat[T any](input T, times int) (output []T) {
 		return
 	}
 
-	for i := 0; i < times; i++ {
+	for range times {
 		output = append(output, input)
 	}
 
