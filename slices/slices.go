@@ -121,3 +121,16 @@ func Uniq[T comparable](input []T) []T {
 
 	return output
 }
+
+func Compact[T comparable](input []T) []T {
+	var zero T
+	output := make([]T, 0, len(input))
+
+	for i := range input {
+		if input[i] != zero {
+			output = append(output, input[i])
+		}
+	}
+
+	return output
+}

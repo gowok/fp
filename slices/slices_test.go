@@ -163,3 +163,20 @@ func Test_Uniq(t *testing.T) {
 		must.New(t).Equal(expected, output)
 	})
 }
+
+func Test_Compact(t *testing.T) {
+	t.Run("all contains", func(t *testing.T) {
+		sample := []int{1, 2, 3}
+		output := Compact(sample)
+
+		must.New(t).Equal(sample, output)
+	})
+
+	t.Run("should remove some", func(t *testing.T) {
+		sample := []int{1, 0, 2, 0, 3}
+		output := Compact(sample)
+		expected := []int{1, 2, 3}
+
+		must.New(t).Equal(expected, output)
+	})
+}
