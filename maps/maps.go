@@ -1,6 +1,11 @@
 package maps
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"maps"
+
+	"github.com/gowok/fp/slices"
+)
 
 func Keys[T comparable, U any](input map[T]U) []T {
 	result := []T{}
@@ -23,7 +28,10 @@ func Values[T comparable, U any](input map[T]U) []U {
 func ValuesSeq[T comparable, U any](input map[T]U) func(yield func(v U) bool) {
 	return func(yield func(v U) bool) {
 		for _, v := range input {
-			yield(v)
+			res := yield(v)
+			if !res {
+				break
+			}
 		}
 	}
 }
@@ -41,13 +49,7 @@ func CopyBy[T comparable, U any](input map[T]U, cb func(key T, value U) bool) ma
 
 func CopyByKeys[T comparable, U any](input map[T]U, keys []T) map[T]U {
 	return CopyBy(input, func(k T, v U) bool {
-		for _, kk := range keys {
-			if k == kk {
-				return true
-			}
-		}
-
-		return false
+		return slices.Contains(keys, k)
 	})
 }
 
@@ -68,17 +70,17 @@ func Entries[T comparable, U any](input map[T]U) []Entry[T, U] {
 func EntriesSeq[T comparable, U any](input map[T]U) func(yield func(e Entry[T, U]) bool) {
 	return func(yield func(e Entry[T, U]) bool) {
 		for k, v := range input {
-			yield(Entry[T, U]{k, v})
+			res := yield(Entry[T, U]{k, v})
+			if !res {
+				break
+			}
 		}
 	}
 }
 
 func Combine[T comparable, U any](input1 map[T]U, input2 map[T]U) map[T]U {
 	result := input1
-	for k, v := range input2 {
-		result[k] = v
-	}
-
+	maps.Copy(result, input2)
 	return result
 }
 
