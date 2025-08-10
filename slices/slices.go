@@ -1,6 +1,7 @@
 package slices
 
 import (
+	"slices"
 	"sync"
 )
 
@@ -79,20 +80,17 @@ func Range[T int | float32 | float64](input T, params ...T) []T {
 	return result
 }
 
-func Includes[T comparable](input []T, comp T) bool {
-	for _, v := range input {
-		if comp == v {
-			return true
-		}
-	}
-
-	return false
+func Contains[T comparable](input []T, comp T) bool {
+	return slices.Contains(input, comp)
 }
 
 func Zip[T any, U any](slice1 []T, slice2 []U) func(yield func(T, U) bool) {
 	return func(yield func(x T, y U) bool) {
 		for i, ii := range slice1 {
-			yield(ii, slice2[i])
+			res := yield(ii, slice2[i])
+			if !res {
+				break
+			}
 		}
 	}
 }
@@ -102,9 +100,24 @@ func Repeat[T any](input T, times int) (output []T) {
 		return
 	}
 
-	for i := 0; i < times; i++ {
+	for range times {
 		output = append(output, input)
 	}
 
 	return
+}
+
+func Uniq[T comparable](input []T) []T {
+	output := make([]T, 0, len(input))
+	track := make(map[T]struct{}, len(input))
+	for i := range input {
+		if _, ok := track[input[i]]; ok {
+			continue
+		}
+
+		track[input[i]] = struct{}{}
+		output = append(output, input[i])
+	}
+
+	return output
 }

@@ -95,17 +95,17 @@ func Test_Range(t *testing.T) {
 
 }
 
-func Test_Includes(t *testing.T) {
+func Test_Contains(t *testing.T) {
 	sample := []int{1, 2, 3}
 	t.Run("positive", func(t *testing.T) {
-		actual := Includes(sample, 1)
+		actual := Contains(sample, 1)
 
 		must := must.New(t)
 		must.True(actual)
 	})
 
 	t.Run("negative", func(t *testing.T) {
-		actual := Includes(sample, 0)
+		actual := Contains(sample, 0)
 
 		must := must.New(t)
 		must.False(actual)
@@ -144,5 +144,22 @@ func Test_Repeat(t *testing.T) {
 
 		actual = Repeat('*', -1)
 		must.Equal(len(expected), len(actual))
+	})
+}
+
+func Test_Uniq(t *testing.T) {
+	t.Run("all different", func(t *testing.T) {
+		sample := []int{1, 2, 3}
+		output := Uniq(sample)
+
+		must.New(t).Equal(sample, output)
+	})
+
+	t.Run("should remove some", func(t *testing.T) {
+		sample := []int{1, 2, 2, 1, 3}
+		output := Uniq(sample)
+		expected := []int{1, 2, 3}
+
+		must.New(t).Equal(expected, output)
 	})
 }
