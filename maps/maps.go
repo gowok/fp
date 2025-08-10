@@ -106,3 +106,8 @@ func ToStruct(input map[string]any, v any) error {
 
 	return json.Unmarshal(jsoned, v)
 }
+
+func UniqValues[T comparable, U comparable](input map[T]U) []U {
+	values := Values(input)
+	return slices.Uniq(values)
+}

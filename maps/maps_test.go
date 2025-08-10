@@ -165,5 +165,16 @@ func Test_ToStruct(t *testing.T) {
 		err := ToStruct(map[string]any{"x": func() {}}, struct{}{})
 		must.New(t).NotNil(err)
 	})
+}
 
+func Test_UniqValues(t *testing.T) {
+	input := map[string]int{
+		"x": 1,
+		"y": 2,
+		"z": 1,
+		"a": 3,
+		"b": 2,
+	}
+	actual := UniqValues(input)
+	must.New(t).Equal(len(actual), 3)
 }
