@@ -178,3 +178,64 @@ func Test_UniqValues(t *testing.T) {
 	actual := UniqValues(input)
 	must.New(t).Equal(len(actual), 3)
 }
+
+func Test_Get(t *testing.T) {
+	type Map map[string]any
+	must := must.New(t)
+	var cases = []struct {
+		Title string
+		Input map[string]any
+		Check func(*testing.T, map[string]any)
+	}{
+		{
+			"flat",
+			map[string]any{"host": "localhost", "enabled": true},
+			func(t *testing.T, c map[string]any) {
+				must.Equal(Get(c, "host", ""), "localhost")
+				must.Equal(Get(c, "enabled", false), true)
+			},
+		},
+		{
+			"nested",
+			map[string]any{"host": "localhost", "address": map[string]any{"city": "Jakarta"}},
+			func(t *testing.T, c map[string]any) {
+				must.Equal(Get(c, "host", ""), "localhost")
+				must.Equal(Get(c, "address.city", ""), "Jakarta")
+				must.Equal(Get(c, "host.name", ""), "")
+			},
+		},
+		{
+			"nested type alias",
+			map[string]any{"host": "localhost", "address": Map{"city": "Jakarta"}},
+			func(t *testing.T, c map[string]any) {
+				must.Equal(Get(c, "host", ""), "localhost")
+				must.Equal(Get(c, "address.city", ""), "Jakarta")
+				must.Equal(Get(c, "host.name", ""), "")
+			},
+		},
+		{
+			"nested type any",
+			map[string]any{"host": "localhost", "address": any(map[string]any{"city": "Jakarta"})},
+			func(t *testing.T, c map[string]any) {
+				must.Equal(Get(c, "host", ""), "localhost")
+				must.Equal(Get(c, "address.city", ""), "Jakarta")
+				must.Equal(Get(c, "host.name", ""), "")
+			},
+		},
+		{
+			"default if not possible",
+			map[string]any{"host": "localhost", "enabled": func() bool { return true }},
+			func(t *testing.T, c map[string]any) {
+				must.Equal(Get(c, "host", ""), "localhost")
+				must.Equal(Get(c, "enabled", false), false)
+				must.Equal(Get(c, "uwu", 0), 0)
+			},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.Title, func(t *testing.T) {
+			c.Check(t, c.Input)
+		})
+	}
+}

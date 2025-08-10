@@ -3,6 +3,7 @@ package maps
 import (
 	"encoding/json"
 	"maps"
+	"strings"
 
 	"github.com/gowok/fp/slices"
 )
@@ -110,4 +111,50 @@ func ToStruct(input map[string]any, v any) error {
 func UniqValues[T comparable, U comparable](input map[T]U) []U {
 	values := Values(input)
 	return slices.Uniq(values)
+}
+
+// Get is a helper function to get value from map[string]any
+// it's posible to get value from nested map by using dot (.) as separator
+func Get[T any](data map[string]any, path string, defaults ...T) T {
+	var value T
+	if len(defaults) > 0 {
+		value = defaults[0]
+	}
+
+	keys := strings.Split(path, ".")
+	current := data
+
+	for i, key := range keys {
+		val, exists := current[key]
+		if !exists {
+			return value
+		}
+
+		if i == len(keys)-1 {
+			if v, ok := val.(T); ok {
+				return v
+			}
+			return value
+		}
+
+		switch next := val.(type) {
+		case map[string]any:
+			current = next
+		default:
+			jsonB, err := json.Marshal(next)
+			if err != nil {
+				return value
+			}
+
+			n := map[string]any{}
+			err = json.Unmarshal(jsonB, &n)
+			if err != nil {
+				return value
+			}
+
+			current = n
+		}
+	}
+
+	return value
 }
