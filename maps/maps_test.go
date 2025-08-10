@@ -135,3 +135,35 @@ func Test_FromStruct(t *testing.T) {
 		must.New(t).Equal("map[string]interface {}", reflect.TypeOf(actual).String())
 	})
 }
+
+func Test_ToStruct(t *testing.T) {
+	type example struct {
+		A int `json:"a"`
+		B int `json:"b"`
+		X int `json:"x"`
+		Y int `json:"y"`
+		Z int `json:"z"`
+	}
+	t.Run("positive", func(t *testing.T) {
+		input := map[string]any{
+			"x": 1,
+			"y": 2,
+			"z": 3,
+			"a": 4,
+			"b": 5,
+		}
+		actual := example{}
+		expected := example{4, 5, 1, 2, 3}
+		err := ToStruct(input, &actual)
+
+		must := must.New(t)
+		must.Nil(err)
+		must.Equal(actual, expected)
+	})
+
+	t.Run("func", func(t *testing.T) {
+		err := ToStruct(map[string]any{"x": func() {}}, struct{}{})
+		must.New(t).NotNil(err)
+	})
+
+}

@@ -84,7 +84,7 @@ func Combine[T comparable, U any](input1 map[T]U, input2 map[T]U) map[T]U {
 	return result
 }
 
-func FromStruct[T any](input T) (output map[string]any) {
+func FromStruct(input any) (output map[string]any) {
 	jsonb, err := json.Marshal(input)
 	if err != nil {
 		return
@@ -96,4 +96,13 @@ func FromStruct[T any](input T) (output map[string]any) {
 	}
 
 	return
+}
+
+func ToStruct(input map[string]any, v any) error {
+	jsoned, err := json.Marshal(input)
+	if err != nil {
+		return err
+	}
+
+	return json.Unmarshal(jsoned, v)
 }
