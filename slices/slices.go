@@ -49,6 +49,11 @@ func MapIndex[T comparable, U any](input []T, cb func(val T, index int) U) []U {
 	return result
 }
 
+func UniqMap[T comparable, U comparable](input []T, cb func(val T) U) []U {
+	maps := Map(input, cb)
+	return Uniq(maps)
+}
+
 func Reduce[T comparable, U any](input []T, cb func(acc U, val T, index int) U, initial U) U {
 	var result U
 	for i, v := range input {

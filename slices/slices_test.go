@@ -57,6 +57,16 @@ func Test_MapIndex(t *testing.T) {
 	must.Equal(expected, actual)
 }
 
+func Test_UniqMap(t *testing.T) {
+	input := []int{1, 2, 1, 3, 2}
+	actual := UniqMap(input, func(s int) int {
+		return s * 2
+	})
+
+	must := must.New(t)
+	must.Equal(len(actual), 3)
+}
+
 func Test_Reduce(t *testing.T) {
 	expected := 6
 	sample := []int{1, 2, 3}
