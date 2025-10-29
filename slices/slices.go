@@ -34,13 +34,13 @@ func Filter[T comparable](input []T, cb func(val T, index int) bool) []T {
 	return result
 }
 
-func Map[T comparable, U any](input []T, cb func(val T) U) []U {
-	return MapIndex(input, func(val T, index int) U {
+func Map[T, U any](input []T, cb func(val T) U) []U {
+	return MapIndex(input, func(val T, _ int) U {
 		return cb(val)
 	})
 }
 
-func MapIndex[T comparable, U any](input []T, cb func(val T, index int) U) []U {
+func MapIndex[T, U any](input []T, cb func(val T, index int) U) []U {
 	result := []U{}
 	for i, v := range input {
 		result = append(result, cb(v, i))
@@ -66,7 +66,7 @@ func Reduce[T comparable, U any](input []T, cb func(acc U, val T, index int) U, 
 func Range[T int | float32 | float64](input T, params ...T) []T {
 	result := []T{}
 	var start T = 0
-	var finish T = input
+	finish := input
 	var step T = 1
 
 	if len(params) > 0 {
