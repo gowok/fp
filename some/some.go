@@ -36,6 +36,14 @@ func Of[T any](val T) Some[T] {
 	return newOptional(&val)
 }
 
+func Map[T, U any](o Some[T], cb func(val T) U) Some[U] {
+	if val, ok := o.Get(); ok {
+		return Of(cb(val))
+	}
+
+	return Empty[U]()
+}
+
 func (o Some[T]) Get() (T, bool) {
 	if !o.IsPresent() {
 		var value T

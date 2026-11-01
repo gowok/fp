@@ -49,6 +49,36 @@ func TestSome_IsPresent(t *testing.T) {
 	must.False(t, Empty[string]().IsPresent())
 }
 
+func TestMap(t *testing.T) {
+	t.Run("present", func(t *testing.T) {
+		actual := Map(Of(2), func(val int) int {
+			return val * 10
+		})
+
+		must.True(t, actual.IsPresent())
+		val, ok := actual.Get()
+		must.True(t, ok)
+		must.Equal(t, 20, val)
+	})
+
+	t.Run("empty", func(t *testing.T) {
+		actual := Map(Empty[int](), func(val int) int {
+			return val * 10
+		})
+
+		must.False(t, actual.IsPresent())
+	})
+
+	t.Run("change value type", func(t *testing.T) {
+		val, ok := Map(Of(42), func(val int) string {
+			return "answer"
+		}).Get()
+
+		must.True(t, ok)
+		must.Equal(t, "answer", val)
+	})
+}
+
 func TestSome_OrElse(t *testing.T) {
 	must.Equal(t, "test", Of("test").OrElse("default"))
 	must.Equal(t, "default", Empty[string]().OrElse("default"))
