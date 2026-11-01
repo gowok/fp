@@ -38,6 +38,13 @@ func Test_ValuesSeq(t *testing.T) {
 	must.Equal(len(sample), count)
 }
 
+func Test_Has(t *testing.T) {
+	must := must.New(t)
+	must.True(Has(sample, "x"))
+	must.False(Has(sample, "nope"))
+	must.False(Has(map[string]int{}, "x"))
+}
+
 func Test_CopyBy(t *testing.T) {
 	expected := map[string]int{
 		"x": 1,
