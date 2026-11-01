@@ -313,3 +313,24 @@ func Test_Compact(t *testing.T) {
 		must.New(t).Equal(expected, output)
 	})
 }
+
+func Test_Reverse(t *testing.T) {
+	t.Run("even length", func(t *testing.T) {
+		must.New(t).Equal([]int{4, 3, 2, 1}, Reverse([]int{1, 2, 3, 4}))
+	})
+
+	t.Run("odd length", func(t *testing.T) {
+		must.New(t).Equal([]int{3, 2, 1}, Reverse([]int{1, 2, 3}))
+	})
+
+	t.Run("empty", func(t *testing.T) {
+		must.New(t).Equal([]int{}, Reverse([]int{}))
+	})
+
+	t.Run("does not mutate input", func(t *testing.T) {
+		input := []int{1, 2, 3}
+		_ = Reverse(input)
+
+		must.New(t).Equal([]int{1, 2, 3}, input)
+	})
+}

@@ -192,3 +192,12 @@ func Compact[T comparable](input []T) []T {
 
 	return output
 }
+
+func Reverse[T any](input []T) []T {
+	output := make([]T, len(input))
+	for i, v := range input {
+		output[len(input)-1-i] = v
+	}
+
+	return output
+}
