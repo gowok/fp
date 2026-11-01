@@ -243,4 +243,11 @@ func TestSome_JSON(t *testing.T) {
 			}
 		})
 	}
+
+	t.Run("positive/unmarshal null overwrites present value", func(t *testing.T) {
+		s := Of("test")
+		err := json.Unmarshal([]byte("null"), &s)
+		must.Nil(t, err)
+		must.False(t, s.IsPresent())
+	})
 }

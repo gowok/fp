@@ -96,6 +96,9 @@ func (o Some[T]) OrPanic(errs ...error) T {
 }
 
 func (o *Some[T]) UnmarshalJSON(b []byte) error {
+	o.value = nil
+	o.isPresent = false
+
 	if bytes.Equal(b, []byte("{}")) {
 		return nil
 	}
