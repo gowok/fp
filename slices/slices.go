@@ -74,7 +74,7 @@ func Range[T int | float32 | float64](input T, params ...T) []T {
 		finish = params[0]
 	}
 
-	if len(params) == 2 {
+	if len(params) >= 2 {
 		step = params[1]
 	}
 
