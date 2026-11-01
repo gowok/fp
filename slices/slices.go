@@ -210,3 +210,7 @@ func Flatten[T any](input [][]T) []T {
 
 	return output
 }
+
+func FlatMap[T any, U any](input []T, cb func(val T) []U) []U {
+	return Flatten(Map(input, cb))
+}

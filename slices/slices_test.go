@@ -348,3 +348,32 @@ func Test_Flatten(t *testing.T) {
 		must.New(t).Equal([]int{}, Flatten([][]int{}))
 	})
 }
+
+func Test_FlatMap(t *testing.T) {
+	t.Run("expand", func(t *testing.T) {
+		actual := FlatMap([]int{1, 2, 3}, func(s int) []int {
+			return []int{s, s * 10}
+		})
+
+		must.New(t).Equal([]int{1, 10, 2, 20, 3, 30}, actual)
+	})
+
+	t.Run("drop via nil", func(t *testing.T) {
+		actual := FlatMap([]int{1, 2, 3, 4}, func(s int) []int {
+			if s%2 == 0 {
+				return []int{s}
+			}
+			return nil
+		})
+
+		must.New(t).Equal([]int{2, 4}, actual)
+	})
+
+	t.Run("empty", func(t *testing.T) {
+		actual := FlatMap([]int{}, func(s int) []int {
+			return []int{s}
+		})
+
+		must.New(t).Equal([]int{}, actual)
+	})
+}
