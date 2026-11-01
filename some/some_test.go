@@ -57,6 +57,7 @@ func TestSome_OrElse(t *testing.T) {
 func TestSome_OrElseFunc(t *testing.T) {
 	must.Equal(t, "test", Of("test").OrElseFunc(func() string { return "default" }))
 	must.Equal(t, "default", Empty[string]().OrElseFunc(func() string { return "default" }))
+	must.Equal(t, "", Empty[string]().OrElseFunc(nil))
 }
 
 func TestSome_Get(t *testing.T) {

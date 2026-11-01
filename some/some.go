@@ -68,8 +68,13 @@ func (o Some[T]) OrElse(val T) T {
 }
 
 func (o Some[T]) OrElseFunc(gen func() T) T {
-	if !o.IsPresent() && gen != nil {
-		return gen()
+	if !o.IsPresent() {
+		if gen != nil {
+			return gen()
+		}
+
+		var zero T
+		return zero
 	}
 
 	return *o.value
