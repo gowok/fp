@@ -44,6 +44,14 @@ func Map[T, U any](o Some[T], cb func(val T) U) Some[U] {
 	return Empty[U]()
 }
 
+func Filter[T any](o Some[T], cb func(val T) bool) Some[T] {
+	if val, ok := o.Get(); ok && cb(val) {
+		return o
+	}
+
+	return Empty[T]()
+}
+
 func (o Some[T]) Get() (T, bool) {
 	if !o.IsPresent() {
 		var value T

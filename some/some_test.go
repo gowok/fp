@@ -79,6 +79,35 @@ func TestMap(t *testing.T) {
 	})
 }
 
+func TestFilter(t *testing.T) {
+	t.Run("kept", func(t *testing.T) {
+		actual := Filter(Of(10), func(val int) bool {
+			return val > 5
+		})
+
+		must.True(t, actual.IsPresent())
+		val, ok := actual.Get()
+		must.True(t, ok)
+		must.Equal(t, 10, val)
+	})
+
+	t.Run("dropped by predicate", func(t *testing.T) {
+		actual := Filter(Of(2), func(val int) bool {
+			return val > 5
+		})
+
+		must.False(t, actual.IsPresent())
+	})
+
+	t.Run("empty", func(t *testing.T) {
+		actual := Filter(Empty[int](), func(val int) bool {
+			return true
+		})
+
+		must.False(t, actual.IsPresent())
+	})
+}
+
 func TestSome_OrElse(t *testing.T) {
 	must.Equal(t, "test", Of("test").OrElse("default"))
 	must.Equal(t, "default", Empty[string]().OrElse("default"))
