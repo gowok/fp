@@ -69,6 +69,28 @@ func Test_Find(t *testing.T) {
 	})
 }
 
+func Test_Any(t *testing.T) {
+	sample := []int{1, 2, 3}
+
+	t.Run("found", func(t *testing.T) {
+		must.New(t).True(Any(sample, func(s, i int) bool {
+			return s == 2
+		}))
+	})
+
+	t.Run("not found", func(t *testing.T) {
+		must.New(t).False(Any(sample, func(s, i int) bool {
+			return s == 5
+		}))
+	})
+
+	t.Run("empty input", func(t *testing.T) {
+		must.New(t).False(Any([]int{}, func(s, i int) bool {
+			return true
+		}))
+	})
+}
+
 func Test_Map(t *testing.T) {
 	expected := []int{2, 4, 6}
 	sample := []int{1, 2, 3}
