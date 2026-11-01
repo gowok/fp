@@ -65,6 +65,18 @@ func Test_IsEmpty(t *testing.T) {
 	must.False(IsEmpty(sample))
 }
 
+func Test_Clone(t *testing.T) {
+	must := must.New(t)
+
+	clone := Clone(sample)
+	must.Equal(sample, clone)
+
+	clone["x"] = 100
+	must.Equal(1, sample["x"])
+
+	must.Equal(map[string]int{}, Clone(map[string]int(nil)))
+}
+
 func Test_CopyBy(t *testing.T) {
 	expected := map[string]int{
 		"x": 1,

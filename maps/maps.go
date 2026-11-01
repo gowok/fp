@@ -117,6 +117,10 @@ func Combine[T comparable, U any](input1 map[T]U, input2 map[T]U) map[T]U {
 	return result
 }
 
+func Clone[T comparable, U any](input map[T]U) map[T]U {
+	return Combine(input, nil)
+}
+
 func FromStruct(input any) (output map[string]any) {
 	jsonb, err := json.Marshal(input)
 	if err != nil {
