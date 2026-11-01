@@ -94,6 +94,14 @@ func Reduce[T comparable, U any](input []T, cb func(acc U, val T, index int) U, 
 	return result
 }
 
+func Sum[T int | float32 | float64](input []T) (total T) {
+	for _, v := range input {
+		total += v
+	}
+
+	return
+}
+
 func Range[T int | float32 | float64](input T, params ...T) []T {
 	result := []T{}
 	var start T = 0

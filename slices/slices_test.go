@@ -163,6 +163,20 @@ func Test_Reduce(t *testing.T) {
 	}, 10))
 }
 
+func Test_Sum(t *testing.T) {
+	t.Run("ints", func(t *testing.T) {
+		must.New(t).Equal(6, Sum([]int{1, 2, 3}))
+	})
+
+	t.Run("floats", func(t *testing.T) {
+		must.New(t).Equal(float64(6), Sum([]float64{1, 2, 3}))
+	})
+
+	t.Run("empty", func(t *testing.T) {
+		must.New(t).Equal(0, Sum([]int{}))
+	})
+}
+
 func Test_Range(t *testing.T) {
 	t.Run("max only", func(t *testing.T) {
 		expected := []int{0, 1, 2, 3, 4}
