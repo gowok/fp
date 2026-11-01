@@ -131,10 +131,23 @@ func Test_Zip(t *testing.T) {
 	sample1 := []int{1, 2, 3}
 	sample2 := []int{1, 2, 3}
 
-	must := must.New(t)
+	m := must.New(t)
 	for s1, s2 := range Zip(sample1, sample2) {
-		must.Equal(s1, s2)
+		m.Equal(s1, s2)
 	}
+
+	t.Run("unequal lengths", func(t *testing.T) {
+		a := []int{1, 2, 3}
+		b := []int{10, 20}
+		expected := []int{11, 22}
+
+		actual := []int{}
+		for x, y := range Zip(a, b) {
+			actual = append(actual, x+y)
+		}
+
+		must.New(t).Equal(expected, actual)
+	})
 }
 
 func Test_Repeat(t *testing.T) {

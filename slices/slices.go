@@ -96,6 +96,10 @@ func Contains[T comparable](input []T, comp T) bool {
 func Zip[T any, U any](slice1 []T, slice2 []U) func(yield func(T, U) bool) {
 	return func(yield func(x T, y U) bool) {
 		for i, ii := range slice1 {
+			if i >= len(slice2) {
+				break
+			}
+
 			res := yield(ii, slice2[i])
 			if !res {
 				break
