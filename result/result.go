@@ -44,8 +44,11 @@ func (r Result[T]) UnwrapOr(def T) T {
 }
 
 func Map[T any, U any](r Result[T], fn func(T) U) Result[U] {
-	if r.err != nil || !r.isPresent {
+	if r.err != nil {
 		return Err[U](r.err)
+	}
+	if !r.isPresent {
+		return Err[U](ErrNoValuePresent)
 	}
 	return Ok(fn(*r.value))
 }

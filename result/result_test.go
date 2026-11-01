@@ -77,6 +77,14 @@ func TestErrMethod(t *testing.T) {
 	must.Nil(t, ok.Err())
 }
 
+func TestMapAbsentResult(t *testing.T) {
+	r := New[string](nil, nil)
+	mapped := Map(r, func(string) string { return "unexpected" })
+
+	must.True(t, mapped.IsErr())
+	must.Equal(t, ErrNoValuePresent, mapped.Err())
+}
+
 func TestUnwrapOr_PresentAndAbsent(t *testing.T) {
 	must.Equal(t, "val", Ok("val").UnwrapOr("def"))
 	must.Equal(t, 10, Ok(10).UnwrapOr(0))
