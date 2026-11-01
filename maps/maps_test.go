@@ -2,6 +2,7 @@ package maps
 
 import (
 	"reflect"
+	"strconv"
 	"testing"
 
 	"github.com/golang-must/must"
@@ -102,6 +103,31 @@ func Test_Filter(t *testing.T) {
 	must := must.New(t)
 	must.Equal(expected, actual)
 	must.Equal(map[string]int{"x": 1, "y": 2, "z": 3}, sample)
+}
+
+func Test_Map(t *testing.T) {
+	expected := map[string]string{
+		"x": "1!",
+		"y": "2!",
+		"z": "3!",
+	}
+	actual := Map(sample, func(value int) string {
+		return strconv.Itoa(value) + "!"
+	})
+
+	must := must.New(t)
+	must.Equal(expected, actual)
+	must.Equal(map[string]int{"x": 1, "y": 2, "z": 3}, sample)
+}
+
+func Test_MapEmpty(t *testing.T) {
+	actual := Map[string, int, string](nil, func(value int) string {
+		return strconv.Itoa(value)
+	})
+
+	must := must.New(t)
+	must.Equal(map[string]string{}, actual)
+	must.NotNil(actual)
 }
 
 func Test_CopyByKeys(t *testing.T) {
