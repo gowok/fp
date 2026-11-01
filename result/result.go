@@ -52,3 +52,13 @@ func Map[T any, U any](r Result[T], fn func(T) U) Result[U] {
 	}
 	return Ok(fn(*r.value))
 }
+
+func FlatMap[T any, U any](r Result[T], fn func(T) Result[U]) Result[U] {
+	if r.err != nil {
+		return Err[U](r.err)
+	}
+	if !r.isPresent {
+		return Err[U](ErrNoValuePresent)
+	}
+	return fn(*r.value)
+}

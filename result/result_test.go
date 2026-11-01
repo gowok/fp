@@ -92,3 +92,43 @@ func TestUnwrapOr_PresentAndAbsent(t *testing.T) {
 	must.Equal(t, "def", New[string](nil, nil).UnwrapOr("def"))
 	must.Equal(t, "def", Err[string](errors.New("e")).UnwrapOr("def"))
 }
+
+func TestFlatMap(t *testing.T) {
+	t.Run("ok to ok", func(t *testing.T) {
+		r := FlatMap(Ok(2), func(x int) Result[string] {
+			return Ok(fmt.Sprintf("%d", x*3))
+		})
+
+		v, err := r.Unwrap()
+		must.Nil(t, err)
+		must.Equal(t, "6", v)
+	})
+
+	t.Run("ok to err", func(t *testing.T) {
+		r := FlatMap(Ok(2), func(int) Result[string] {
+			return Err[string](errors.New("bad"))
+		})
+
+		must.True(t, r.IsErr())
+		must.Equal(t, "bad", r.Err().Error())
+	})
+
+	t.Run("err keeps original error", func(t *testing.T) {
+		src := errors.New("boom")
+		r := FlatMap(Err[int](src), func(int) Result[string] {
+			return Ok("unexpected")
+		})
+
+		must.True(t, r.IsErr())
+		must.Equal(t, src, r.Err())
+	})
+
+	t.Run("absent becomes no value present", func(t *testing.T) {
+		r := FlatMap(New[string](nil, nil), func(string) Result[int] {
+			return Ok(0)
+		})
+
+		must.True(t, r.IsErr())
+		must.Equal(t, ErrNoValuePresent, r.Err())
+	})
+}
