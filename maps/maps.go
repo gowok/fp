@@ -54,6 +54,12 @@ func CopyByKeys[T comparable, U any](input map[T]U, keys []T) map[T]U {
 	})
 }
 
+func Omit[T comparable, U any](input map[T]U, keys []T) map[T]U {
+	return CopyBy(input, func(k T, _ U) bool {
+		return !slices.Contains(keys, k)
+	})
+}
+
 type Entry[T comparable, U any] struct {
 	Key   T
 	Value U

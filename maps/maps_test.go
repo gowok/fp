@@ -62,6 +62,18 @@ func Test_CopyByKeys(t *testing.T) {
 	must.Equal(expected, actual)
 }
 
+func Test_Omit(t *testing.T) {
+	expected := map[string]int{
+		"x": 1,
+		"y": 2,
+	}
+	actual := Omit(sample, []string{"z"})
+
+	m := must.New(t)
+	m.Equal(expected, actual)
+	m.Equal(map[string]int{"x": 1, "y": 2, "z": 3}, sample)
+}
+
 func Test_Entries(t *testing.T) {
 	expected := []Entry[string, int]{
 		{"x", 1},
