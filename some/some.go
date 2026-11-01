@@ -154,8 +154,8 @@ func (o *Some[T]) UnmarshalJSON(b []byte) error {
 
 func (o Some[T]) MarshalJSON() ([]byte, error) {
 	if o.IsPresent() {
-		return json.Marshal(o.value)
+		return json.Marshal(*o.value)
 	}
 
-	return json.Marshal(map[string]any{})
+	return []byte("null"), nil
 }

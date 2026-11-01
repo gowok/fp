@@ -302,7 +302,7 @@ func TestSome_JSON(t *testing.T) {
 			name:      "positive/marshal empty",
 			operation: "marshal",
 			input:     Empty[string](),
-			want:      "{}",
+			want:      "null",
 		},
 		{
 			name:      "positive/marshal embedded",
