@@ -52,6 +52,10 @@ func Has[T comparable, U any](input map[T]U, key T) bool {
 	return ok
 }
 
+func IsEmpty[T comparable, U any](input map[T]U) bool {
+	return len(input) == 0
+}
+
 func CopyBy[T comparable, U any](input map[T]U, cb func(key T, value U) bool) map[T]U {
 	result := map[T]U{}
 	for k, v := range input {

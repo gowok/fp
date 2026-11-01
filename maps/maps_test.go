@@ -58,6 +58,13 @@ func Test_Has(t *testing.T) {
 	must.False(Has(map[string]int{}, "x"))
 }
 
+func Test_IsEmpty(t *testing.T) {
+	must := must.New(t)
+	must.True(IsEmpty(map[string]int{}))
+	must.True(IsEmpty(map[string]int(nil)))
+	must.False(IsEmpty(sample))
+}
+
 func Test_CopyBy(t *testing.T) {
 	expected := map[string]int{
 		"x": 1,
