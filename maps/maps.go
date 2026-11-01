@@ -26,6 +26,16 @@ func Values[T comparable, U any](input map[T]U) []U {
 	return result
 }
 
+func KeysSeq[T comparable, U any](input map[T]U) func(yield func(k T) bool) {
+	return func(yield func(k T) bool) {
+		for k := range input {
+			if !yield(k) {
+				break
+			}
+		}
+	}
+}
+
 func ValuesSeq[T comparable, U any](input map[T]U) func(yield func(v U) bool) {
 	return func(yield func(v U) bool) {
 		for _, v := range input {

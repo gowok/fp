@@ -29,6 +29,19 @@ func Test_Values(t *testing.T) {
 	must.Equal(len(values), len(actual))
 }
 
+func Test_KeysSeq(t *testing.T) {
+	must := must.New(t)
+	seen := map[string]bool{}
+	for k := range KeysSeq(sample) {
+		seen[k] = true
+	}
+
+	must.Equal(len(sample), len(seen))
+	must.True(seen["x"])
+	must.True(seen["y"])
+	must.True(seen["z"])
+}
+
 func Test_ValuesSeq(t *testing.T) {
 	must := must.New(t)
 	count := 0
