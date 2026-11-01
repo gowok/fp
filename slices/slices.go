@@ -201,3 +201,12 @@ func Reverse[T any](input []T) []T {
 
 	return output
 }
+
+func Flatten[T any](input [][]T) []T {
+	output := []T{}
+	for _, v := range input {
+		output = append(output, v...)
+	}
+
+	return output
+}

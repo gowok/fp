@@ -334,3 +334,17 @@ func Test_Reverse(t *testing.T) {
 		must.New(t).Equal([]int{1, 2, 3}, input)
 	})
 }
+
+func Test_Flatten(t *testing.T) {
+	t.Run("multiple", func(t *testing.T) {
+		must.New(t).Equal([]int{1, 2, 3, 4}, Flatten([][]int{{1, 2}, {3, 4}}))
+	})
+
+	t.Run("with empty inner", func(t *testing.T) {
+		must.New(t).Equal([]int{1, 2}, Flatten([][]int{{1}, {}, {2}}))
+	})
+
+	t.Run("empty", func(t *testing.T) {
+		must.New(t).Equal([]int{}, Flatten([][]int{}))
+	})
+}
