@@ -69,3 +69,10 @@ func Or[T any](r Result[T], alt Result[T]) Result[T] {
 	}
 	return alt
 }
+
+func OrElse[T any](r Result[T], fn func() Result[T]) Result[T] {
+	if r.IsOk() {
+		return r
+	}
+	return fn()
+}

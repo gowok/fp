@@ -149,3 +149,34 @@ func TestOr(t *testing.T) {
 		must.Equal(t, 3, r.UnwrapOr(0))
 	})
 }
+
+func TestOrElse(t *testing.T) {
+	t.Run("ok skips callback", func(t *testing.T) {
+		called := false
+		r := OrElse(Ok(1), func() Result[int] {
+			called = true
+			return Ok(2)
+		})
+
+		must.False(t, called)
+		must.Equal(t, 1, r.UnwrapOr(0))
+	})
+
+	t.Run("err calls callback", func(t *testing.T) {
+		r := OrElse(Err[int](errors.New("boom")), func() Result[int] {
+			return Ok(2)
+		})
+
+		must.True(t, r.IsOk())
+		must.Equal(t, 2, r.UnwrapOr(0))
+	})
+
+	t.Run("absent calls callback", func(t *testing.T) {
+		r := OrElse(New[int](nil, nil), func() Result[int] {
+			return Ok(3)
+		})
+
+		must.True(t, r.IsOk())
+		must.Equal(t, 3, r.UnwrapOr(0))
+	})
+}
