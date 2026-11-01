@@ -104,6 +104,10 @@ func Test_Range(t *testing.T) {
 		must.Equal(expected, actual)
 	})
 
+	t.Run("negative step", func(t *testing.T) {
+		must.New(t).Equal([]int{5, 4, 3, 2}, Range(5, 1, -1))
+	})
+
 	t.Run("zero step", func(t *testing.T) {
 		must.New(t).Equal([]int{}, Range(1, 5, 0))
 	})
