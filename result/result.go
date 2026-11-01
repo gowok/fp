@@ -1,6 +1,10 @@
 package result
 
-import "errors"
+import (
+	"bytes"
+	"encoding/json"
+	"errors"
+)
 
 type Result[T any] struct {
 	value     *T
@@ -86,4 +90,42 @@ func OrElse[T any](r Result[T], fn func() Result[T]) Result[T] {
 		return r
 	}
 	return fn()
+}
+
+func (r Result[T]) MarshalJSON() ([]byte, error) {
+	if r.err != nil {
+		return json.Marshal(map[string]any{"error": r.err.Error()})
+	}
+	if !r.isPresent {
+		return []byte("null"), nil
+	}
+	return json.Marshal(r.value)
+}
+
+func (r *Result[T]) UnmarshalJSON(b []byte) error {
+	r.value = nil
+	r.err = nil
+	r.isPresent = false
+
+	if bytes.Equal(b, []byte("{}")) || bytes.Equal(b, []byte("null")) {
+		return nil
+	}
+
+	var envelope struct {
+		Err *string `json:"error"`
+	}
+	if err := json.Unmarshal(b, &envelope); err == nil && envelope.Err != nil {
+		r.err = errors.New(*envelope.Err)
+		return nil
+	}
+
+	var v *T
+	if err := json.Unmarshal(b, &v); err != nil {
+		return err
+	}
+	if v != nil {
+		r.value = v
+		r.isPresent = true
+	}
+	return nil
 }

@@ -1,6 +1,7 @@
 package result
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"testing"
@@ -215,5 +216,75 @@ func TestOrElse(t *testing.T) {
 
 		must.True(t, r.IsOk())
 		must.Equal(t, 3, r.UnwrapOr(0))
+	})
+}
+
+func TestMarshalJSON(t *testing.T) {
+	tests := []struct {
+		name  string
+		input Result[any]
+		want  string
+	}{
+		{"present int", Ok[any](7), "7"},
+		{"present string", Ok[any]("x"), `"x"`},
+		{"error", Err[any](errors.New("boom")), `{"error":"boom"}`},
+		{"absent", New[any](nil, nil), "null"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b, err := json.Marshal(tt.input)
+			must.Nil(t, err)
+			must.Equal(t, tt.want, string(b))
+		})
+	}
+}
+
+func TestUnmarshalJSON(t *testing.T) {
+	t.Run("present value", func(t *testing.T) {
+		var r Result[int]
+		must.Nil(t, json.Unmarshal([]byte("7"), &r))
+		must.True(t, r.IsOk())
+		must.Equal(t, 7, r.UnwrapOr(0))
+	})
+
+	t.Run("error payload", func(t *testing.T) {
+		var r Result[int]
+		must.Nil(t, json.Unmarshal([]byte(`{"error":"boom"}`), &r))
+		must.True(t, r.IsErr())
+		must.Equal(t, "boom", r.Err().Error())
+	})
+
+	t.Run("empty object is absent", func(t *testing.T) {
+		var r Result[int]
+		must.Nil(t, json.Unmarshal([]byte("{}"), &r))
+		must.False(t, r.IsOk())
+		must.False(t, r.IsErr())
+		must.Equal(t, 0, r.UnwrapOr(0))
+	})
+
+	t.Run("null is absent", func(t *testing.T) {
+		r := Ok(3)
+		must.Nil(t, json.Unmarshal([]byte("null"), &r))
+		must.False(t, r.IsOk())
+	})
+
+	t.Run("round trip value", func(t *testing.T) {
+		b, err := json.Marshal(Ok(42))
+		must.Nil(t, err)
+
+		var r Result[int]
+		must.Nil(t, json.Unmarshal(b, &r))
+		must.Equal(t, 42, r.UnwrapOr(0))
+	})
+
+	t.Run("round trip error", func(t *testing.T) {
+		b, err := json.Marshal(Err[string](errors.New("bad")))
+		must.Nil(t, err)
+
+		var r Result[string]
+		must.Nil(t, json.Unmarshal(b, &r))
+		must.True(t, r.IsErr())
+		must.Equal(t, "bad", r.Err().Error())
 	})
 }
