@@ -148,6 +148,18 @@ func Test_EntriesSeq(t *testing.T) {
 	must.Equal(len(sample), count)
 }
 
+func Test_FromEntries(t *testing.T) {
+	entries := []Entry[string, int]{
+		{"x", 1},
+		{"y", 2},
+		{"z", 3},
+	}
+
+	must := must.New(t)
+	must.Equal(sample, FromEntries(entries))
+	must.Equal(map[string]int{}, FromEntries[string, int](nil))
+}
+
 func Test_Combine(t *testing.T) {
 	expected := map[string]int{
 		"x": 1,

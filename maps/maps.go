@@ -110,6 +110,15 @@ func EntriesSeq[T comparable, U any](input map[T]U) func(yield func(e Entry[T, U
 	}
 }
 
+func FromEntries[T comparable, U any](entries []Entry[T, U]) map[T]U {
+	result := map[T]U{}
+	for _, e := range entries {
+		result[e.Key] = e.Value
+	}
+
+	return result
+}
+
 func Combine[T comparable, U any](input1 map[T]U, input2 map[T]U) map[T]U {
 	result := map[T]U{}
 	maps.Copy(result, input1)
