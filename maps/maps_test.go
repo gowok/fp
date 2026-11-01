@@ -98,6 +98,7 @@ func Test_Combine(t *testing.T) {
 
 	must := must.New(t)
 	must.Equal(expected, actual)
+	must.Equal(map[string]int{"x": 1, "y": 2, "z": 3}, sample)
 }
 
 func Test_FromStruct(t *testing.T) {

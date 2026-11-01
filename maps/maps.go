@@ -80,7 +80,8 @@ func EntriesSeq[T comparable, U any](input map[T]U) func(yield func(e Entry[T, U
 }
 
 func Combine[T comparable, U any](input1 map[T]U, input2 map[T]U) map[T]U {
-	result := input1
+	result := map[T]U{}
+	maps.Copy(result, input1)
 	maps.Copy(result, input2)
 	return result
 }
