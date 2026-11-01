@@ -10,3 +10,12 @@ func Pipe[T any](x T, fns ...func(T) T) T {
 	}
 	return x
 }
+
+func Compose[T any](fns ...func(T) T) func(T) T {
+	return func(x T) T {
+		for i := len(fns) - 1; i >= 0; i-- {
+			x = fns[i](x)
+		}
+		return x
+	}
+}
