@@ -72,6 +72,10 @@ func (o Some[T]) IsPresent() bool {
 	return o.isPresent
 }
 
+func (o Some[T]) IsEmpty() bool {
+	return !o.isPresent
+}
+
 func (o Some[T]) IfPresent(callback func(T), elseCallback ...func()) {
 	if val, ok := o.Get(); ok {
 		callback(val)

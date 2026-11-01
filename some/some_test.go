@@ -49,6 +49,11 @@ func TestSome_IsPresent(t *testing.T) {
 	must.False(t, Empty[string]().IsPresent())
 }
 
+func TestSome_IsEmpty(t *testing.T) {
+	must.True(t, Empty[string]().IsEmpty())
+	must.False(t, Of("test").IsEmpty())
+}
+
 func TestMap(t *testing.T) {
 	t.Run("present", func(t *testing.T) {
 		actual := Map(Of(2), func(val int) int {
