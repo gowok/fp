@@ -60,6 +60,14 @@ func FlatMap[T, U any](o Some[T], cb func(val T) Some[U]) Some[U] {
 	return Empty[U]()
 }
 
+func Equal[T comparable](a, b Some[T]) bool {
+	if a.IsPresent() != b.IsPresent() {
+		return false
+	}
+
+	return !a.IsPresent() || *a.value == *b.value
+}
+
 func (o Some[T]) Get() (T, bool) {
 	if !o.IsPresent() {
 		var value T
