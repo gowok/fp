@@ -83,12 +83,12 @@ func (o Some[T]) OrElseFunc(gen func() T) T {
 var ErrNoValuePresent = errors.New("no value present")
 
 func (o Some[T]) OrPanic(errs ...error) T {
-	err := ErrNoValuePresent
-	if len(errs) > 0 {
-		err = errors.New(errs[0].Error())
-	}
-
 	if !o.IsPresent() {
+		err := ErrNoValuePresent
+		if len(errs) > 0 && errs[0] != nil {
+			err = errs[0]
+		}
+
 		panic(err)
 	}
 

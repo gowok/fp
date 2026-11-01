@@ -165,6 +165,21 @@ func TestSome_OrPanic(t *testing.T) {
 	}
 }
 
+func TestSome_OrPanic_ErrorIdentity(t *testing.T) {
+	t.Run("nil custom error on present value", func(t *testing.T) {
+		must.Equal(t, "test", Of("test").OrPanic(nil))
+	})
+
+	t.Run("custom error is preserved", func(t *testing.T) {
+		sentinel := errors.New("sentinel")
+		defer func() {
+			r := recover()
+			must.True(t, errors.Is(r.(error), sentinel))
+		}()
+		Empty[string]().OrPanic(sentinel)
+	})
+}
+
 func TestSome_JSON(t *testing.T) {
 	type container struct {
 		Opt Some[string] `json:"opt"`
