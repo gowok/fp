@@ -108,6 +108,34 @@ func TestFilter(t *testing.T) {
 	})
 }
 
+func TestFlatMap(t *testing.T) {
+	t.Run("present returns mapped some", func(t *testing.T) {
+		actual := FlatMap(Of(10), func(val int) Some[string] {
+			return Of("ten")
+		})
+
+		val, ok := actual.Get()
+		must.True(t, ok)
+		must.Equal(t, "ten", val)
+	})
+
+	t.Run("present but mapping returns empty", func(t *testing.T) {
+		actual := FlatMap(Of(10), func(val int) Some[string] {
+			return Empty[string]()
+		})
+
+		must.False(t, actual.IsPresent())
+	})
+
+	t.Run("empty", func(t *testing.T) {
+		actual := FlatMap(Empty[int](), func(val int) Some[string] {
+			return Of("x")
+		})
+
+		must.False(t, actual.IsPresent())
+	})
+}
+
 func TestSome_OrElse(t *testing.T) {
 	must.Equal(t, "test", Of("test").OrElse("default"))
 	must.Equal(t, "default", Empty[string]().OrElse("default"))

@@ -52,6 +52,14 @@ func Filter[T any](o Some[T], cb func(val T) bool) Some[T] {
 	return Empty[T]()
 }
 
+func FlatMap[T, U any](o Some[T], cb func(val T) Some[U]) Some[U] {
+	if val, ok := o.Get(); ok {
+		return cb(val)
+	}
+
+	return Empty[U]()
+}
+
 func (o Some[T]) Get() (T, bool) {
 	if !o.IsPresent() {
 		var value T
