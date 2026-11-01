@@ -62,3 +62,10 @@ func FlatMap[T any, U any](r Result[T], fn func(T) Result[U]) Result[U] {
 	}
 	return fn(*r.value)
 }
+
+func Or[T any](r Result[T], alt Result[T]) Result[T] {
+	if r.IsOk() {
+		return r
+	}
+	return alt
+}

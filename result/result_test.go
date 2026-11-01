@@ -132,3 +132,20 @@ func TestFlatMap(t *testing.T) {
 		must.Equal(t, ErrNoValuePresent, r.Err())
 	})
 }
+
+func TestOr(t *testing.T) {
+	t.Run("ok keeps itself", func(t *testing.T) {
+		r := Or(Ok(1), Ok(2))
+		must.Equal(t, 1, r.UnwrapOr(0))
+	})
+
+	t.Run("err falls back", func(t *testing.T) {
+		r := Or(Err[int](errors.New("boom")), Ok(2))
+		must.Equal(t, 2, r.UnwrapOr(0))
+	})
+
+	t.Run("absent falls back", func(t *testing.T) {
+		r := Or(New[int](nil, nil), Ok(3))
+		must.Equal(t, 3, r.UnwrapOr(0))
+	})
+}
