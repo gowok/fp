@@ -69,6 +69,34 @@ func Test_Find(t *testing.T) {
 	})
 }
 
+func Test_FindIndex(t *testing.T) {
+	sample := []int{10, 20, 30}
+
+	t.Run("found", func(t *testing.T) {
+		actual := FindIndex(sample, func(s, i int) bool {
+			return s > 15
+		})
+
+		must.New(t).Equal(1, actual)
+	})
+
+	t.Run("not found", func(t *testing.T) {
+		actual := FindIndex(sample, func(s, i int) bool {
+			return s > 100
+		})
+
+		must.New(t).Equal(-1, actual)
+	})
+
+	t.Run("empty input", func(t *testing.T) {
+		actual := FindIndex([]int{}, func(s, i int) bool {
+			return true
+		})
+
+		must.New(t).Equal(-1, actual)
+	})
+}
+
 func Test_Any(t *testing.T) {
 	sample := []int{1, 2, 3}
 

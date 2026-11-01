@@ -45,6 +45,16 @@ func Find[T any](input []T, cb func(val T, index int) bool) (T, bool) {
 	return zero, false
 }
 
+func FindIndex[T any](input []T, cb func(val T, index int) bool) int {
+	for i, v := range input {
+		if cb(v, i) {
+			return i
+		}
+	}
+
+	return -1
+}
+
 func Any[T any](input []T, cb func(val T, index int) bool) bool {
 	for i, v := range input {
 		if cb(v, i) {
