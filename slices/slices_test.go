@@ -68,14 +68,15 @@ func Test_UniqMap(t *testing.T) {
 }
 
 func Test_Reduce(t *testing.T) {
-	expected := 6
 	sample := []int{1, 2, 3}
-	actual := Reduce(sample, func(acc, val, i int) int {
-		return acc + val
-	}, 0)
-
 	must := must.New(t)
-	must.Equal(expected, actual)
+
+	must.Equal(6, Reduce(sample, func(acc, val, i int) int {
+		return acc + val
+	}, 0))
+	must.Equal(16, Reduce(sample, func(acc, val, i int) int {
+		return acc + val
+	}, 10))
 }
 
 func Test_Range(t *testing.T) {

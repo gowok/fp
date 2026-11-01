@@ -55,7 +55,7 @@ func UniqMap[T comparable, U comparable](input []T, cb func(val T) U) []U {
 }
 
 func Reduce[T comparable, U any](input []T, cb func(acc U, val T, index int) U, initial U) U {
-	var result U
+	result := initial
 	for i, v := range input {
 		result = cb(result, v, i)
 	}
