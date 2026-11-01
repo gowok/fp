@@ -34,6 +34,17 @@ func Filter[T comparable](input []T, cb func(val T, index int) bool) []T {
 	return result
 }
 
+func Find[T any](input []T, cb func(val T, index int) bool) (T, bool) {
+	var zero T
+	for i, v := range input {
+		if cb(v, i) {
+			return v, true
+		}
+	}
+
+	return zero, false
+}
+
 func Map[T, U any](input []T, cb func(val T) U) []U {
 	return MapIndex(input, func(val T, _ int) U {
 		return cb(val)

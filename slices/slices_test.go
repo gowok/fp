@@ -35,6 +35,40 @@ func Test_Filter(t *testing.T) {
 	must.Equal(expected, actual)
 }
 
+func Test_Find(t *testing.T) {
+	sample := []int{10, 20, 30}
+
+	t.Run("found", func(t *testing.T) {
+		val, ok := Find(sample, func(s, i int) bool {
+			return s > 15
+		})
+
+		m := must.New(t)
+		m.True(ok)
+		m.Equal(20, val)
+	})
+
+	t.Run("not found", func(t *testing.T) {
+		val, ok := Find(sample, func(s, i int) bool {
+			return s > 100
+		})
+
+		m := must.New(t)
+		m.False(ok)
+		m.Equal(0, val)
+	})
+
+	t.Run("empty input", func(t *testing.T) {
+		val, ok := Find([]int{}, func(s, i int) bool {
+			return true
+		})
+
+		m := must.New(t)
+		m.False(ok)
+		m.Equal(0, val)
+	})
+}
+
 func Test_Map(t *testing.T) {
 	expected := []int{2, 4, 6}
 	sample := []int{1, 2, 3}
