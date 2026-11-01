@@ -63,6 +63,12 @@ func CopyBy[T comparable, U any](input map[T]U, cb func(key T, value U) bool) ma
 	return result
 }
 
+func Filter[T comparable, U any](input map[T]U, cb func(value U) bool) map[T]U {
+	return CopyBy(input, func(_ T, value U) bool {
+		return cb(value)
+	})
+}
+
 func CopyByKeys[T comparable, U any](input map[T]U, keys []T) map[T]U {
 	return CopyBy(input, func(k T, v U) bool {
 		return slices.Contains(keys, k)

@@ -71,6 +71,20 @@ func Test_CopyBy(t *testing.T) {
 	must.Equal(expected, actual)
 }
 
+func Test_Filter(t *testing.T) {
+	expected := map[string]int{
+		"y": 2,
+		"z": 3,
+	}
+	actual := Filter(sample, func(value int) bool {
+		return value > 1
+	})
+
+	must := must.New(t)
+	must.Equal(expected, actual)
+	must.Equal(map[string]int{"x": 1, "y": 2, "z": 3}, sample)
+}
+
 func Test_CopyByKeys(t *testing.T) {
 	expected := map[string]int{
 		"x": 1,
