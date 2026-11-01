@@ -402,3 +402,36 @@ func Test_GroupBy(t *testing.T) {
 		must.New(t).Equal(map[int][]int{}, actual)
 	})
 }
+
+func Test_SortBy(t *testing.T) {
+	type person struct {
+		name string
+		age  int
+	}
+
+	t.Run("by age", func(t *testing.T) {
+		input := []person{{"C", 30}, {"A", 20}, {"B", 25}}
+		actual := SortBy(input, func(p person) int {
+			return p.age
+		})
+
+		expected := []person{{"A", 20}, {"B", 25}, {"C", 30}}
+		must.New(t).Equal(expected, actual)
+	})
+
+	t.Run("does not mutate input", func(t *testing.T) {
+		input := []person{{"C", 30}, {"A", 20}, {"B", 25}}
+		_ = SortBy(input, func(p person) int {
+			return p.age
+		})
+
+		expected := []person{{"C", 30}, {"A", 20}, {"B", 25}}
+		must.New(t).Equal(expected, input)
+	})
+
+	t.Run("empty", func(t *testing.T) {
+		must.New(t).Equal([]int{}, SortBy([]int{}, func(s int) int {
+			return s
+		}))
+	})
+}

@@ -1,6 +1,7 @@
 package slices
 
 import (
+	"cmp"
 	"slices"
 	"sync"
 )
@@ -221,6 +222,15 @@ func GroupBy[T any, K comparable](input []T, cb func(val T) K) map[K][]T {
 		k := cb(v)
 		output[k] = append(output[k], v)
 	}
+
+	return output
+}
+
+func SortBy[T any, K cmp.Ordered](input []T, cb func(val T) K) []T {
+	output := slices.Clone(input)
+	slices.SortStableFunc(output, func(a, b T) int {
+		return cmp.Compare(cb(a), cb(b))
+	})
 
 	return output
 }
