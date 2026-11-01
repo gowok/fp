@@ -93,6 +93,43 @@ func TestUnwrapOr_PresentAndAbsent(t *testing.T) {
 	must.Equal(t, "def", Err[string](errors.New("e")).UnwrapOr("def"))
 }
 
+func TestOrPanic(t *testing.T) {
+	t.Run("ok returns value", func(t *testing.T) {
+		must.Equal(t, 7, Ok(7).OrPanic())
+	})
+
+	t.Run("err panics with stored error", func(t *testing.T) {
+		e := errors.New("boom")
+		defer func() {
+			must.Equal(t, e, recover())
+		}()
+		Err[int](e).OrPanic()
+	})
+
+	t.Run("absent panics with no value present", func(t *testing.T) {
+		defer func() {
+			must.Equal(t, ErrNoValuePresent, recover())
+		}()
+		New[int](nil, nil).OrPanic()
+	})
+
+	t.Run("custom error overrides stored error", func(t *testing.T) {
+		custom := errors.New("custom")
+		defer func() {
+			must.Equal(t, custom, recover())
+		}()
+		Err[int](errors.New("boom")).OrPanic(custom)
+	})
+
+	t.Run("nil custom error falls back to stored error", func(t *testing.T) {
+		e := errors.New("boom")
+		defer func() {
+			must.Equal(t, e, recover())
+		}()
+		Err[int](e).OrPanic(nil)
+	})
+}
+
 func TestFlatMap(t *testing.T) {
 	t.Run("ok to ok", func(t *testing.T) {
 		r := FlatMap(Ok(2), func(x int) Result[string] {

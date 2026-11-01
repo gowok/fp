@@ -43,6 +43,17 @@ func (r Result[T]) UnwrapOr(def T) T {
 	return *r.value
 }
 
+func (r Result[T]) OrPanic(errs ...error) T {
+	v, err := r.Unwrap()
+	if err != nil {
+		if len(errs) > 0 && errs[0] != nil {
+			err = errs[0]
+		}
+		panic(err)
+	}
+	return v
+}
+
 func Map[T any, U any](r Result[T], fn func(T) U) Result[U] {
 	if r.err != nil {
 		return Err[U](r.err)
