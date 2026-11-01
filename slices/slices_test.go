@@ -104,6 +104,9 @@ func Test_Range(t *testing.T) {
 		must.Equal(expected, actual)
 	})
 
+	t.Run("zero step", func(t *testing.T) {
+		must.New(t).Equal([]int{}, Range(1, 5, 0))
+	})
 }
 
 func Test_Contains(t *testing.T) {

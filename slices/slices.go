@@ -78,6 +78,10 @@ func Range[T int | float32 | float64](input T, params ...T) []T {
 		step = params[1]
 	}
 
+	if step == 0 {
+		return result
+	}
+
 	for ; start < finish; start += step {
 		result = append(result, start)
 	}
