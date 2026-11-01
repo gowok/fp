@@ -214,3 +214,13 @@ func Flatten[T any](input [][]T) []T {
 func FlatMap[T any, U any](input []T, cb func(val T) []U) []U {
 	return Flatten(Map(input, cb))
 }
+
+func GroupBy[T any, K comparable](input []T, cb func(val T) K) map[K][]T {
+	output := map[K][]T{}
+	for _, v := range input {
+		k := cb(v)
+		output[k] = append(output[k], v)
+	}
+
+	return output
+}

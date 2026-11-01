@@ -377,3 +377,28 @@ func Test_FlatMap(t *testing.T) {
 		must.New(t).Equal([]int{}, actual)
 	})
 }
+
+func Test_GroupBy(t *testing.T) {
+	t.Run("by parity", func(t *testing.T) {
+		actual := GroupBy([]int{1, 2, 3, 4, 5}, func(s int) string {
+			if s%2 == 0 {
+				return "even"
+			}
+			return "odd"
+		})
+
+		expected := map[string][]int{
+			"even": {2, 4},
+			"odd":  {1, 3, 5},
+		}
+		must.New(t).Equal(expected, actual)
+	})
+
+	t.Run("empty", func(t *testing.T) {
+		actual := GroupBy([]int{}, func(s int) int {
+			return s
+		})
+
+		must.New(t).Equal(map[int][]int{}, actual)
+	})
+}
