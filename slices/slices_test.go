@@ -57,15 +57,26 @@ func Test_MapIndex(t *testing.T) {
 	must.Equal(expected, actual)
 }
 
-func Test_Reduce(t *testing.T) {
-	expected := 6
-	sample := []int{1, 2, 3}
-	actual := Reduce(sample, func(acc, val, i int) int {
-		return acc + val
-	}, 0)
+func Test_UniqMap(t *testing.T) {
+	input := []int{1, 2, 1, 3, 2}
+	actual := UniqMap(input, func(s int) int {
+		return s * 2
+	})
 
 	must := must.New(t)
-	must.Equal(expected, actual)
+	must.Equal(len(actual), 3)
+}
+
+func Test_Reduce(t *testing.T) {
+	sample := []int{1, 2, 3}
+	must := must.New(t)
+
+	must.Equal(6, Reduce(sample, func(acc, val, i int) int {
+		return acc + val
+	}, 0))
+	must.Equal(16, Reduce(sample, func(acc, val, i int) int {
+		return acc + val
+	}, 10))
 }
 
 func Test_Range(t *testing.T) {
@@ -93,16 +104,58 @@ func Test_Range(t *testing.T) {
 		must.Equal(expected, actual)
 	})
 
+	t.Run("extra params ignored", func(t *testing.T) {
+		must.New(t).Equal([]int{1, 3}, Range(1, 5, 2, 99))
+	})
+
+	t.Run("negative step", func(t *testing.T) {
+		must.New(t).Equal([]int{5, 4, 3, 2}, Range(5, 1, -1))
+	})
+
+	t.Run("zero step", func(t *testing.T) {
+		must.New(t).Equal([]int{}, Range(1, 5, 0))
+	})
+}
+
+func Test_Contains(t *testing.T) {
+	sample := []int{1, 2, 3}
+	t.Run("positive", func(t *testing.T) {
+		actual := Contains(sample, 1)
+
+		must := must.New(t)
+		must.True(actual)
+	})
+
+	t.Run("negative", func(t *testing.T) {
+		actual := Contains(sample, 0)
+
+		must := must.New(t)
+		must.False(actual)
+	})
+
 }
 
 func Test_Zip(t *testing.T) {
 	sample1 := []int{1, 2, 3}
 	sample2 := []int{1, 2, 3}
 
-	must := must.New(t)
+	m := must.New(t)
 	for s1, s2 := range Zip(sample1, sample2) {
-		must.Equal(s1, s2)
+		m.Equal(s1, s2)
 	}
+
+	t.Run("unequal lengths", func(t *testing.T) {
+		a := []int{1, 2, 3}
+		b := []int{10, 20}
+		expected := []int{11, 22}
+
+		actual := []int{}
+		for x, y := range Zip(a, b) {
+			actual = append(actual, x+y)
+		}
+
+		must.New(t).Equal(expected, actual)
+	})
 }
 
 func Test_Repeat(t *testing.T) {
@@ -126,5 +179,39 @@ func Test_Repeat(t *testing.T) {
 
 		actual = Repeat('*', -1)
 		must.Equal(len(expected), len(actual))
+	})
+}
+
+func Test_Uniq(t *testing.T) {
+	t.Run("all different", func(t *testing.T) {
+		sample := []int{1, 2, 3}
+		output := Uniq(sample)
+
+		must.New(t).Equal(sample, output)
+	})
+
+	t.Run("should remove some", func(t *testing.T) {
+		sample := []int{1, 2, 2, 1, 3}
+		output := Uniq(sample)
+		expected := []int{1, 2, 3}
+
+		must.New(t).Equal(expected, output)
+	})
+}
+
+func Test_Compact(t *testing.T) {
+	t.Run("all contains", func(t *testing.T) {
+		sample := []int{1, 2, 3}
+		output := Compact(sample)
+
+		must.New(t).Equal(sample, output)
+	})
+
+	t.Run("should remove some", func(t *testing.T) {
+		sample := []int{1, 0, 2, 0, 3}
+		output := Compact(sample)
+		expected := []int{1, 2, 3}
+
+		must.New(t).Equal(expected, output)
 	})
 }
